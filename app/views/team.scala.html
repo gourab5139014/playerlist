@@ -1,0 +1,76 @@
+@(team: Team, teamEditableCSS: String, typeOptions: Map[String,String], teamForm: Form[Team], teamPlayers: List[Player], players: List[Player])
+
+@import helper._
+@import helper.twitterBootstrap._
+@import models.Team
+
+@main("MySelector Page") {
+	<div id="feedback" style="margin-left:200px; margin-right: 200px; margin-bottom: 30px; border-style: solid;border-width:2px;"> @flash.get("success")  @flash.get("error")</div>
+	<div id="team-config" style="float:right; clear:both; margin-left:200px;border-style: solid;border-width:5px;">
+    <h2>Team Configuration</h2>
+	@form(routes.Application.save(),'id -> "teamForm") {
+	    @*inputText(teamForm("teamName"),'label -> "Name your team")
+	    @inputText(teamForm("userName")) *@
+	    <fieldset>
+        <legend>Team (@teamForm("teamName").valueOr("Create team here"))</legend>
+        @helper.inputText(teamForm("userName"), '_label -> "Enter your name")
+        @helper.inputText(teamForm("teamName"),'_label -> "Enter team name")
+        @helper.textarea(teamForm("description"), '_label -> "Description")
+        @select(
+            teamForm("teamTypeSelector"),
+            options = options(typeOptions),
+            '_label -> "This is my dropdown label",
+            '_showConstraints -> false
+        )
+        </fieldset>
+	    <button type="submit">Save</button>
+	}
+	<div style="float:left"><a href="@routes.Application.setTeamEditable(true)">Click here to edit team</a></div> <div style="clear:both;"></div>
+	<div style="float:left"><a href="@routes.Application.setTeamEditable(false)">Click here to freeze team</a></div>
+	</div>
+	
+	<div id="team-list" style="float:left;margin-left:200px;border-style: solid;border-width:8px;">
+    <h1>@teamPlayers.size() player(s) in your team</h1>
+	<h2>Your team</h2>
+	<h3>$ @team.getRemainingMoney() remaining out of @team.getAllocatedMoney()</h3>
+    <table>
+	<thead>
+    <tr><td>Serial No.</td><td>Player Name</td><td>Price</td></tr>
+	</thead>
+	<tbody>
+        @for(player <- teamPlayers) {
+            <tr>
+                <td>@player.getId()</td><td>@player.getName()</td><td>@player.getPrice()</td><td>@player.getPlayerType()</td>
+				<td style="display: @teamEditableCSS"><a href="@routes.Application.deletePlayer(player.id)">Delete</a></td>
+            </tr>
+        }
+	</tbody>
+    </table>
+	</div>
+	
+    <div id="player-list" style="float:right;margin-right:200px;border-style: solid;border-width:2px;">
+    <h1>@players.size() player(s) in inventory</h1>
+    
+    <!--ul>
+        @for(player <- players) {
+            <li>
+                @player.name -- @player
+            </li>
+        }
+    </ul-->
+    <table>
+	<thead>
+    <tr><td>Serial No.</td><td>Player Name</td><td>Price</td></tr>
+	</thead>
+	<tbody>
+        @for(player <- players) {
+            <tr>
+                <td>@player.getId()</td><td>@player.getName()</td><td>@player.getPrice()</td><td>@player.getPlayerType()</td>
+				<td style="display: @teamEditableCSS"><a href="@routes.Application.addPlayer(player.id)">Add</a></td>
+            </tr>
+        }
+	</tbody>
+    </table>
+	</div>
+}
+
