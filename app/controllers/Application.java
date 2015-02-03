@@ -67,5 +67,9 @@ public class Application extends Controller {
 	    //Sytem.err.println("Received UserName "+bindedForm.get("userName")+" & TeamName "+bindedForm.get("teamName"));
 	    return redirect(routes.Application.teamList());
 	}
+	
+	public static Result reset() {
+		return TODO;
+	}
 
 }

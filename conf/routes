@@ -12,6 +12,7 @@ GET	/team/add/:id	controllers.Application.addPlayer(id:Long)
 GET	/team/delete/:id	controllers.Application.deletePlayer(id:Long)
 GET /team 	controllers.Application.setTeamEditable(val: Boolean)
 POST /team/save controllers.Application.save()
+POST /team/reset controllers.Application.reset()
 
 # Player Lists
 GET		/list		controllers.Application.players

@@ -4,73 +4,93 @@
 @import helper.twitterBootstrap._
 @import models.Team
 
-@main("MySelector Page") {
-	<div id="feedback" style="margin-left:200px; margin-right: 200px; margin-bottom: 30px; border-style: solid;border-width:2px;"> @flash.get("success")  @flash.get("error")</div>
-	<div id="team-config" style="float:right; clear:both; margin-left:200px;border-style: solid;border-width:5px;">
-    <h2>Team Configuration</h2>
-	@form(routes.Application.save(),'id -> "teamForm") {
-	    @*inputText(teamForm("teamName"),'label -> "Name your team")
-	    @inputText(teamForm("userName")) *@
-	    <fieldset>
+@main("Cricket Team Selector") {
+ 	
+	<div class="container">
+	<div id="page-wrapper">
+	<div class="jumbotron">
+                <h1>8players</h1>
+                <h4>8players application allows you to indulge in creating a cricket team that you want. </h4>
+                <h5>Contact : <a href="mailto:gourab5139014@@gmail.com" target="">gourab5139014 at gmail dot com</a></h5>
+    </div>
+	<div id="team-config">
+	<div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Hello!</strong> @flash.get("success") @flash.get("error")
+    </div>
+	@form(routes.Application.save(),'id -> "teamForm", 'class -> "form-inline") { 
+    <fieldset>
         <legend>Team (@teamForm("teamName").valueOr("Create team here"))</legend>
-        @helper.inputText(teamForm("userName"), '_label -> "Enter your name")
-        @helper.inputText(teamForm("teamName"),'_label -> "Enter team name")
-        @helper.textarea(teamForm("description"), '_label -> "Description")
-        @select(
-            teamForm("teamTypeSelector"),
-            options = options(typeOptions),
-            '_label -> "This is my dropdown label",
-            '_showConstraints -> false
-        )
-        </fieldset>
-	    <button type="submit">Save</button>
+        @helper.inputText(teamForm("userName"), '_label -> "Your name", 'class -> "form-group") 
+		@helper.inputText(teamForm("teamName"),'_label -> "Team name", 'class -> "form-group") 
+		@select( teamForm("teamTypeSelector"), options = options(typeOptions), '_label -> "Team Type", 'class -> "form-group", '_showConstraints -> false )
+    </fieldset>
+    <center>
+                        <button type="submit" class="btn btn-primary">Create Team</button>
+    </center>
+    }
+
+	@form(routes.Application.reset(),'id -> "teamForm", 'class -> "form-inline") { 
+                <center><button type="submit" class="btn btn-danger" style="margin-top: 20px">Reset Team</button></center>
 	}
-	<div style="float:left"><a href="@routes.Application.setTeamEditable(true)">Click here to edit team</a></div> <div style="clear:both;"></div>
-	<div style="float:left"><a href="@routes.Application.setTeamEditable(false)">Click here to freeze team</a></div>
-	</div>
-	
-	<div id="team-list" style="float:left;margin-left:200px;border-style: solid;border-width:8px;">
+    </div>
+</div>
+<div class="row">
+<div id="team-list" class="col-sm-6 col-sm-offset-1 text-center" style="background-color:lavender;">
     <h1>@teamPlayers.size() player(s) in your team</h1>
-	<h2>Your team</h2>
-	<h3>$ @team.getRemainingMoney() remaining out of @team.getAllocatedMoney()</h3>
-    <table>
-	<thead>
-    <tr><td>Serial No.</td><td>Player Name</td><td>Price</td></tr>
-	</thead>
-	<tbody>
-        @for(player <- teamPlayers) {
+    <h2>Your team</h2>
+    <h3>$ @team.getRemainingMoney() remaining out of @team.getAllocatedMoney()</h3>
+    <table class="table table-striped table-hover ">
+        <thead>
             <tr>
-                <td>@player.getId()</td><td>@player.getName()</td><td>@player.getPrice()</td><td>@player.getPlayerType()</td>
-				<td style="display: @teamEditableCSS"><a href="@routes.Application.deletePlayer(player.id)">Delete</a></td>
+                <td>Serial No.</td>
+                <td>Player Name</td>
+                <td>Price</td>
             </tr>
-        }
-	</tbody>
+        </thead>
+        <tbody>
+            @for(player
+            <- teamPlayers) { <tr>
+                <td>@player.getId()</td>
+                <td>@player.getName()</td>
+                <td>@player.getPrice()</td>
+                <td>@player.getPlayerType()</td>
+                <td style="display: @teamEditableCSS"><a href="@routes.Application.deletePlayer(player.id)">Delete</a>
+                </td>
+                </tr>
+                }
+        </tbody>
     </table>
-	</div>
-	
-    <div id="player-list" style="float:right;margin-right:200px;border-style: solid;border-width:2px;">
+</div>
+
+<div id="player-list" class="col-sm-7 col-sm-offset-3 text-center" style="background-color:lavenderblush;">
     <h1>@players.size() player(s) in inventory</h1>
-    
-    <!--ul>
-        @for(player <- players) {
-            <li>
-                @player.name -- @player
-            </li>
-        }
-    </ul-->
-    <table>
-	<thead>
-    <tr><td>Serial No.</td><td>Player Name</td><td>Price</td></tr>
-	</thead>
-	<tbody>
-        @for(player <- players) {
+
+    <table class="table table-striped table-hover ">
+        <thead>
             <tr>
-                <td>@player.getId()</td><td>@player.getName()</td><td>@player.getPrice()</td><td>@player.getPlayerType()</td>
-				<td style="display: @teamEditableCSS"><a href="@routes.Application.addPlayer(player.id)">Add</a></td>
+                <td>Serial No.</td>
+                <td>Player Name</td>
+                <td>Price</td>
             </tr>
-        }
-	</tbody>
+        </thead>
+        <tbody>
+            @for(player
+            <- players) { <tr>
+                <td>@player.getId()</td>
+                <td>@player.getName()</td>
+                <td>@player.getPrice()</td>
+                <td>@player.getPlayerType()</td>
+                <td style="display: @teamEditableCSS"><a href="@routes.Application.addPlayer(player.id)">Add</a>
+                </td>
+                </tr>
+                }
+        </tbody>
     </table>
+</div>
+	</div>
+	</div>
 	</div>
 }
 
