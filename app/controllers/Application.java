@@ -47,6 +47,7 @@ public class Application extends Controller {
         options.put("3", "4 batsmen, 1 wicketkeeper, 1 all rounders, 2 bowlers");
 		String teamEditableCSS = "none";
 		if(t.isEditable()) teamEditableCSS = "inherit";
+		System.err.println("Player movement is now "+teamEditableCSS);
 		//TODO: Change to fetch option texts from TeamType member of Team object
 	    return ok(views.html.team.render(t, teamEditableCSS,options, teamForm, t.getPlayers(),t.getAvailablePlayers()));
 	    //eturn TODO;
@@ -63,13 +64,21 @@ public class Application extends Controller {
 	    //DynamicForm bindedForm = form().bindFromRequest();
 	    Form<Team> bindedForm = teamForm.bindFromRequest();
 	    Team boundTeam = bindedForm.get();
-	    System.err.println("Team Name - "+boundTeam.getTeamName()+" team type = "+request().body().asFormUrlEncoded().get("teamTypeSelector")[0]);
-	    //Sytem.err.println("Received UserName "+bindedForm.get("userName")+" & TeamName "+bindedForm.get("teamName"));
+		String teamName = boundTeam.getTeamName();
+		String teamTypeChoice = request().body().asFormUrlEncoded().get("teamTypeSelector")[0];
+	    System.err.println("CONTROLLER : Team Name - "+teamName+" team type = "+teamTypeChoice);
+	    t.setTeamName(teamName);
+		t.setEditable(true);
+		flash("success","Team "+teamName+" created. Now add players!");
+		//Sytem.err.println("Received UserName "+bindedForm.get("userName")+" & TeamName "+bindedForm.get("teamName"));
 	    return redirect(routes.Application.teamList());
 	}
 	
 	public static Result reset() {
-		return TODO;
+		t.reset();
+		flash("welcome","Let us start right away..");
+		return redirect(routes.Application.teamList());
+		//return TODO;
 	}
 
 }

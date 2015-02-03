@@ -15,7 +15,7 @@ public class Team {
      Long remainingMoney = allocatedMoney;
      //TODO: Team Configuration Checker Method
      static boolean firstLoad = true;
-     boolean isEditable = true;
+     boolean isEditable = false;
 	 
 	 public Team() {
 		System.err.println("Team default constructor called!");
@@ -85,6 +85,13 @@ public class Team {
          return playerSource.getAllPlayers();
      }
      
+	 public void reset(){
+		playerSource = PlayerList.fillData();
+		players.clear();
+		isEditable = false;
+        firstLoad=false;
+	 }
+	 
      public void addPlayer(Long id){
         System.err.println("MODEL : Attempting to add Player "+id+" into Team");
 		//Mark player as unavaileble in PlayerList
