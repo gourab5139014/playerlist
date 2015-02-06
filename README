@@ -1,4 +1,10 @@
-This is your new Play application
-=================================
+Welcome to my first Play Framework project
 
-This file will be packaged with your application, when using `activator dist`.
+This application is hosted at http://whispering-thicket-2768.herokuapp.com/
+
+You can easily clone the source and deploy without any changes because no DB interactions are involved.
+
+Cheers!
+@gourabmitra
+
+PS - Do check out the class diagram if you are interested in the backend design
