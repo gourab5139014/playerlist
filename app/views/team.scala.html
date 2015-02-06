@@ -15,12 +15,12 @@
                 <h4>8players application allows you to indulge in creating a cricket team that you want. </h4>
                 <h5>Contact : <a href="mailto:gourab5139014@@gmail.com" target="">gourab5139014 at gmail dot com</a></h5>
     </div>
-	<div id="team-config" @if(teamEditableCSS == "inherit") {style="display: none"} else {style="display: inherit"}>
 	<div class="alert alert-warning alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
                     </button>
-                    @flash.get("welcome") @flash.get("success") @flash.get("error")
+                     @flash.get("welcome") @flash.get("success") @flash.get("error")
     </div>
+	<div id="team-config" @if(teamEditableCSS == "inherit") {style="display: none"} else {style="display: inherit"}>
 	@form(routes.Application.save(),'id -> "teamForm", 'class -> "form-inline") { 
     <fieldset>
         <legend>@teamForm("teamName").valueOr("Team Configuration")</legend>

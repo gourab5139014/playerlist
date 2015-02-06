@@ -14,7 +14,7 @@ public abstract class TeamType {
     int wicketkeeperLimit = 0;
     int allrounderLimit = 0;
     int bowlerLimit = 0;
-
+	
     public boolean isValidAddition(Player p, List<Player> list) {
         int batsmanCount = 0;
         int wicketkeeperCount = 0;
@@ -49,6 +49,8 @@ public abstract class TeamType {
         boolean wicketkeeperDecision = wicketkeeperCount >= 0 && wicketkeeperCount <= getWicketkeeperLimit();
         boolean allrounderDecision = allrounderCount >= 0 && allrounderCount <= getAllrounderLimit();
         //return (batsmanCount <= getBatsmanLimit() && bowlerCount <= getBowlerLimit() && wicketkeeperCount <= getWicketkeeperLimit() && allrounderCount <= getAllrounderLimit());
+		if(batsmanDecision && bowlerDecision && wicketkeeperDecision && allrounderDecision) System.err.println("Addition valid");
+		else System.err.println("Addition NOT valid");
         return (batsmanDecision && bowlerDecision && wicketkeeperDecision && allrounderDecision);
 
     }
@@ -86,6 +88,8 @@ public abstract class TeamType {
         boolean bowlerDecision = bowlerCount >= 0 && bowlerCount <= getBowlerLimit();
         boolean wicketkeeperDecision = wicketkeeperCount >= 0 && wicketkeeperCount <= getWicketkeeperLimit();
         boolean allrounderDecision = allrounderCount >= 0 && allrounderCount <= getAllrounderLimit();
+		if(batsmanDecision && bowlerDecision && wicketkeeperDecision && allrounderDecision) System.err.println("Removal valid");
+		else System.err.println("Removal NOT valid");
         return (batsmanDecision && bowlerDecision && wicketkeeperDecision && allrounderDecision);
     }
 

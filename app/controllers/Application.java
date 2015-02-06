@@ -25,7 +25,12 @@ public class Application extends Controller {
 	
 	public static Result addPlayer(Long id) {
 		System.err.println(" To add player no "+id);
-		t.addPlayer(id);
+		String response = t.addPlayer(id);
+		if(response != null) { //Some error code
+			System.err.println("CONTROLLER : Unable to add player due to "+response);
+			flash("error","Chosen team type does not allow such a selection");
+			return redirect(routes.Application.teamList());
+		}
 		flash("success","Player "+ t.getPlayerById(id).getName() +" added to your team");
 		return redirect(routes.Application.teamList());
 		//return TODO;
@@ -43,8 +48,8 @@ public class Application extends Controller {
 	    //return list of players in the current team here
 	    Map<String, String> options = new HashMap<String, String>();
         options.put("1", "3 batsmen, 1 wicketkeeper, 2 all rounders, 2 bowlers");
-        options.put("2", "3 batsmen, 1 wicketkeeper, 1 all rounders, 3 bowlers");
-        options.put("3", "4 batsmen, 1 wicketkeeper, 1 all rounders, 2 bowlers");
+        options.put("2", "4 batsmen, 1 wicketkeeper, 1 all rounders, 2 bowlers");
+        options.put("3", "3 batsmen, 1 wicketkeeper, 1 all rounders, 3 bowlers");
 		String teamEditableCSS = "none";
 		if(t.isEditable()) teamEditableCSS = "inherit";
 		System.err.println("Player movement is now "+teamEditableCSS);
@@ -68,6 +73,7 @@ public class Application extends Controller {
 		String teamTypeChoice = request().body().asFormUrlEncoded().get("teamTypeSelector")[0];
 	    System.err.println("CONTROLLER : Team Name - "+teamName+" team type = "+teamTypeChoice);
 	    t.setTeamName(teamName);
+		t.setTeamType(Integer.parseInt(teamTypeChoice));
 		t.setEditable(true);
 		flash("success","Team "+teamName+" created. Now add players!");
 		//Sytem.err.println("Received UserName "+bindedForm.get("userName")+" & TeamName "+bindedForm.get("teamName"));

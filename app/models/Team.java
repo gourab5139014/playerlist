@@ -3,6 +3,8 @@ package models;
 import java.util.*;
 import models.Player;
 import models.PlayerList;
+import models.TeamType;
+import models.teamType.*;
 
 public class Team {
 	static final Long startingMoney = 10000000L;
@@ -16,11 +18,22 @@ public class Team {
      //TODO: Team Configuration Checker Method
      static boolean firstLoad = true;
      boolean isEditable = false;
+	 TeamType tt;
 	 
 	 public Team() {
 		System.err.println("Team default constructor called!");
 	 }
      
+	 public void setTeamType(int index) {
+		switch(index) {
+			case 1: tt = new TeamType1();
+					break;
+			case 2: tt = new TeamType2();
+					break;
+			case 3: tt = new TeamType3();
+		}
+	}
+	
 	 public boolean isEditable()
 	 {
 		return isEditable;
@@ -90,21 +103,32 @@ public class Team {
 		players.clear();
 		isEditable = false;
         firstLoad=false;
+		setTeamType(1);
 	 }
 	 
-     public void addPlayer(Long id){
-        System.err.println("MODEL : Attempting to add Player "+id+" into Team");
+     public String addPlayer(Long id){
+        //String result = "";
+		System.err.println("MODEL : Attempting to add Player "+id+" into Team");
 		//Mark player as unavaileble in PlayerList
 		playerSource.removePlayer(id);
 		//Add to team players
 		Player newTeamPlayer = playerSource.getPlayerById(id);
+		if(newTeamPlayer.price > remainingMoney) {
+			playerSource.addPlayer(id);
+			return new String("Insufficient Funds");
+		}
+		if(!tt.isValidAddition(newTeamPlayer,players)) {
+			playerSource.addPlayer(id);
+			return new String("Invalid player addition. Not according to team type");
+		}
+		
 		players.add(newTeamPlayer);
 		//Hit addPlayerPrice
 		addPlayerPrice(newTeamPlayer.price);
-		
+		return null;
      }
      
-     public void deletePlayer(Long id) {
+     public String deletePlayer(Long id) {
 		Long priceToBeReversed = 0L;
         //Remove player from team player list
 		for (Iterator<Player> iterator = players.iterator(); iterator.hasNext();) {
@@ -121,10 +145,13 @@ public class Team {
 		
 		//mark as available in player inventory
 		playerSource.addPlayer(id);
+		return null;
      }
      
-     private void addPlayerPrice(Long price) { //TODO: Check > 0 and raise exception
-         remainingMoney-=price;
+     private String addPlayerPrice(Long price) { //TODO: Check > 0 and raise exception
+         if(price > remainingMoney) return new String("Insufficient Funds");
+		 remainingMoney-=price;
+		 return null;
      }
      
      private void reversePlayerPrice(Long price) { //TODO: Check <= allocatedMoney and raise exception
