@@ -135,6 +135,10 @@ public class Team {
 			Player p = iterator.next();
 			if (p != null && p.id.equals(id)) {
 				System.err.println("MODEL : Attempting to delete Player "+id+" from Team");
+				//Check isRemovalValid() here
+				if(!tt.isValidRemoval(p,players)) {
+					return new String("Invalid player removal. Not according to team type");
+				}
 				priceToBeReversed = p.price;
 				iterator.remove();
 				break;
